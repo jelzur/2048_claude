@@ -25,6 +25,7 @@
       <p>Join the tiles, get to <strong>2048!</strong></p>
       <div class="button-group">
         <button id="new-game">New Game</button>
+        <button id="debug-toggle">Debug</button>
         <button id="dark-toggle">🌙</button>
       </div>
     </div>
@@ -36,6 +37,9 @@
         <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       </div>
       <div class="tiles" id="tiles"></div>
+      <div id="debug-popup" class="hidden">
+        <select id="debug-select"></select>
+      </div>
       <div class="overlay hidden" id="overlay">
         <div class="overlay-content">
           <div id="overlay-title"></div>

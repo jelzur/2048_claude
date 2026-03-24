@@ -5,12 +5,24 @@ let score = 0;
 let best = parseInt(localStorage.getItem('2048-best') || '0');
 let won = false;
 let keepGoing = false;
+let debugMode = false;
 
 const tilesEl = document.getElementById('tiles');
 const scoreEl = document.getElementById('score');
 const bestEl = document.getElementById('best');
 const overlayEl = document.getElementById('overlay');
 const overlayTitleEl = document.getElementById('overlay-title');
+const boardEl = document.getElementById('board');
+const debugPopup = document.getElementById('debug-popup');
+const debugSelect = document.getElementById('debug-select');
+
+// Populate debug value options
+[0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192].forEach(v => {
+  const opt = document.createElement('option');
+  opt.value = v;
+  opt.textContent = v === 0 ? 'Empty' : v;
+  debugSelect.appendChild(opt);
+});
 
 function initGrid() {
   grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(0));
@@ -196,6 +208,59 @@ document.addEventListener('touchend', e => {
   if (Math.abs(dx) > Math.abs(dy)) move(dx > 0 ? 'right' : 'left');
   else move(dy > 0 ? 'down' : 'up');
 }, { passive: true });
+
+// Debug mode
+let debugTargetCell = null;
+
+document.getElementById('debug-toggle').addEventListener('click', () => {
+  debugMode = !debugMode;
+  document.body.classList.toggle('debug-mode', debugMode);
+  document.getElementById('debug-toggle').textContent = debugMode ? 'Debug ON' : 'Debug';
+  hideDebugPopup();
+});
+
+boardEl.addEventListener('click', e => {
+  if (!debugMode || overlayEl.contains(e.target) || debugPopup.contains(e.target)) return;
+
+  const boardRect = boardEl.getBoundingClientRect();
+  const x = e.clientX - boardRect.left - 12;
+  const y = e.clientY - boardRect.top - 12;
+  const cellW = (boardRect.width - 24) / GRID_SIZE;
+  const cellH = (boardRect.height - 24) / GRID_SIZE;
+  const col = Math.floor(x / cellW);
+  const row = Math.floor(y / cellH);
+
+  if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) return;
+
+  debugTargetCell = [row, col];
+  debugSelect.value = grid[row][col];
+
+  // Position popup near the cell, keeping it within the board
+  const popupX = Math.min((col + 0.5) * cellW + 12, boardRect.width - 110);
+  const popupY = Math.min((row + 1) * cellH + 12, boardRect.height - 50);
+  debugPopup.style.left = popupX + 'px';
+  debugPopup.style.top = popupY + 'px';
+  debugPopup.classList.remove('hidden');
+});
+
+debugSelect.addEventListener('change', () => {
+  if (!debugTargetCell) return;
+  const [r, c] = debugTargetCell;
+  grid[r][c] = parseInt(debugSelect.value);
+  render();
+  hideDebugPopup();
+});
+
+document.addEventListener('click', e => {
+  if (!debugPopup.classList.contains('hidden') && !boardEl.contains(e.target)) {
+    hideDebugPopup();
+  }
+});
+
+function hideDebugPopup() {
+  debugPopup.classList.add('hidden');
+  debugTargetCell = null;
+}
 
 document.getElementById('new-game').addEventListener('click', newGame);
 document.getElementById('try-again').addEventListener('click', newGame);
