@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>2048</h1>
+      <div class="scores">
+        <div class="score-box">
+          <div class="score-label">SCORE</div>
+          <div class="score-value" id="score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="score-label">BEST</div>
+          <div class="score-value" id="best">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <p>Join the tiles, get to <strong>2048!</strong></p>
+      <button id="new-game">New Game</button>
+    </div>
+    <div class="board" id="board">
+      <div class="grid">
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      </div>
+      <div class="tiles" id="tiles"></div>
+      <div class="overlay hidden" id="overlay">
+        <div class="overlay-content">
+          <div id="overlay-title"></div>
+          <button id="try-again">Try Again</button>
+        </div>
+      </div>
+    </div>
+    <p class="instructions">Use <strong>arrow keys</strong> to move tiles. Tiles with the same number <strong>merge</strong> when they touch!</p>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
