@@ -4,6 +4,7 @@ let grid = [];
 let score = 0;
 let best = parseInt(localStorage.getItem('2048-best') || '0');
 let won = false;
+let keepGoing = false;
 
 const tilesEl = document.getElementById('tiles');
 const scoreEl = document.getElementById('score');
@@ -134,14 +135,14 @@ function transpose(g) {
 
 function checkEnd() {
   // Win
-  if (!won && grid.flat().includes(2048)) {
+  if (!won && !keepGoing && grid.flat().includes(2048)) {
     won = true;
-    showOverlay('You Win!');
+    showOverlay('You Win!', true);
     return;
   }
   // Lose
   if (!emptyCell() && !canMerge()) {
-    showOverlay('Game Over!');
+    showOverlay('Game Over!', false);
   }
 }
 
@@ -154,14 +155,16 @@ function canMerge() {
   return false;
 }
 
-function showOverlay(title) {
+function showOverlay(title, isWin) {
   overlayTitleEl.textContent = title;
   overlayEl.classList.remove('hidden');
+  document.getElementById('keep-going').classList.toggle('hidden', !isWin);
 }
 
 function newGame() {
   score = 0;
   won = false;
+  keepGoing = false;
   overlayEl.classList.add('hidden');
   initGrid();
   tilesEl.innerHTML = '';
@@ -196,6 +199,10 @@ document.addEventListener('touchend', e => {
 
 document.getElementById('new-game').addEventListener('click', newGame);
 document.getElementById('try-again').addEventListener('click', newGame);
+document.getElementById('keep-going').addEventListener('click', () => {
+  keepGoing = true;
+  overlayEl.classList.add('hidden');
+});
 
 const darkToggle = document.getElementById('dark-toggle');
 if (localStorage.getItem('2048-dark') === 'true') {

@@ -237,6 +237,24 @@ body.dark .tile[data-value="4"]  { background: #5a4a6a; color: #eee4da; }
   margin-bottom: 20px;
 }
 
+.overlay-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+#keep-going {
+  background: #6aaa64;
+}
+
+#keep-going:hover {
+  background: #5a9a54;
+}
+
+#keep-going.hidden {
+  display: none;
+}
+
 .instructions {
   margin-top: 16px;
   color: #776e65;
