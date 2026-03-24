@@ -45,7 +45,7 @@ function addTile() {
 }
 
 function tilePos(idx) {
-  return idx * (100 / GRID_SIZE) + '%';
+  return `calc(${idx * 25}% + ${idx * 3}px)`;
 }
 
 function tileFontSize(value) {
