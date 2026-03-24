@@ -48,12 +48,24 @@ function tilePos(idx) {
   return idx * (100 / GRID_SIZE) + '%';
 }
 
+function tileFontSize(value) {
+  const len = String(value).length;
+  if (len <= 1) return '36px';
+  if (len === 2) return '30px';
+  if (len === 3) return '26px';
+  if (len === 4) return '22px';
+  if (len === 5) return '18px';
+  if (len === 6) return '15px';
+  return '12px';
+}
+
 function renderTile(r, c, value, isNew = false, isMerged = false) {
   const tile = document.createElement('div');
   tile.className = 'tile' + (isNew ? ' new' : '') + (isMerged ? ' merged' : '');
   tile.dataset.value = value;
   tile.style.top = tilePos(r);
   tile.style.left = tilePos(c);
+  tile.style.fontSize = tileFontSize(value);
   tile.textContent = value;
   tilesEl.appendChild(tile);
 }

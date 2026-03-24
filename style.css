@@ -176,6 +176,8 @@ body.dark .tile[data-value="4"]  { background: #5a4a6a; color: #eee4da; }
   font-size: 36px;
   transition: transform 0.1s ease, top 0.1s ease, left 0.1s ease;
   user-select: none;
+  background: #3c3a32;
+  color: #f9f6f2;
 }
 
 .tile.new {
