@@ -83,6 +83,56 @@ button:hover {
   background: #776e65;
 }
 
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+#dark-toggle {
+  padding: 10px 14px;
+  font-size: 18px;
+}
+
+/* Dark mode */
+body.dark {
+  background: #1a1a2e;
+}
+
+body.dark h1 {
+  color: #eee4da;
+}
+
+body.dark .controls p {
+  color: #c9b8a8;
+}
+
+body.dark .board {
+  background: #3a3a4a;
+}
+
+body.dark .cell {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+body.dark .score-box {
+  background: #3a3a4a;
+}
+
+body.dark .overlay {
+  background: rgba(26, 26, 46, 0.85);
+}
+
+body.dark #overlay-title {
+  color: #eee4da;
+}
+
+body.dark .instructions {
+  color: #c9b8a8;
+}
+
+body.dark .tile[data-value="2"]  { background: #4a4a5a; color: #eee4da; }
+body.dark .tile[data-value="4"]  { background: #5a4a6a; color: #eee4da; }
+
 .board {
   position: relative;
   background: #bbada0;

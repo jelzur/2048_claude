@@ -197,5 +197,16 @@ document.addEventListener('touchend', e => {
 document.getElementById('new-game').addEventListener('click', newGame);
 document.getElementById('try-again').addEventListener('click', newGame);
 
+const darkToggle = document.getElementById('dark-toggle');
+if (localStorage.getItem('2048-dark') === 'true') {
+  document.body.classList.add('dark');
+  darkToggle.textContent = '☀️';
+}
+darkToggle.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark');
+  darkToggle.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('2048-dark', isDark);
+});
+
 // Start
 newGame();
