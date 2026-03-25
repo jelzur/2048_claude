@@ -83,6 +83,11 @@ button:hover {
   background: #776e65;
 }
 
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .button-group {
   display: flex;
   gap: 8px;

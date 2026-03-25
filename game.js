@@ -6,6 +6,7 @@ let best = parseInt(localStorage.getItem('2048-best') || '0');
 let won = false;
 let keepGoing = false;
 let debugMode = false;
+let undoSnapshot = null;
 
 const tilesEl = document.getElementById('tiles');
 const scoreEl = document.getElementById('score');
@@ -84,6 +85,22 @@ function render(mergedCells = []) {
     localStorage.setItem('2048-best', best);
   }
   bestEl.textContent = best;
+  saveState();
+}
+
+function saveState() {
+  localStorage.setItem('2048-state', JSON.stringify({ grid, score, won, keepGoing }));
+}
+
+function loadState() {
+  const saved = localStorage.getItem('2048-state');
+  if (!saved) return false;
+  const s = JSON.parse(saved);
+  grid = s.grid;
+  score = s.score;
+  won = s.won;
+  keepGoing = s.keepGoing;
+  return true;
 }
 
 // Slide a single row left, return { row, mergedAt, gained }
@@ -106,6 +123,7 @@ function slideLeft(row) {
 function move(direction) {
   let moved = false;
   const mergedCells = [];
+  const snapshot = { grid: grid.map(r => [...r]), score, won, keepGoing };
 
   // Normalize: rotate grid so we always slide "left", then rotate back
   let g = rotateFor(direction);
@@ -124,8 +142,11 @@ function move(direction) {
   const finalMerged = mergedCells.map(([r, c]) => rotateBackCell(direction, r, c));
 
   if (moved) {
+    undoSnapshot = snapshot;
+    document.getElementById('undo').disabled = false;
     render(finalMerged);
     addTile();
+    saveState();
     checkEnd();
   }
 }
@@ -189,7 +210,10 @@ function newGame() {
   score = 0;
   won = false;
   keepGoing = false;
+  undoSnapshot = null;
+  document.getElementById('undo').disabled = true;
   overlayEl.classList.add('hidden');
+  localStorage.removeItem('2048-state');
   initGrid();
   tilesEl.innerHTML = '';
   scoreEl.textContent = 0;
@@ -280,6 +304,14 @@ document.getElementById('keep-going').addEventListener('click', () => {
   keepGoing = true;
   overlayEl.classList.add('hidden');
 });
+document.getElementById('undo').addEventListener('click', () => {
+  if (!undoSnapshot) return;
+  ({ grid, score, won, keepGoing } = undoSnapshot);
+  undoSnapshot = null;
+  document.getElementById('undo').disabled = true;
+  overlayEl.classList.add('hidden');
+  render();
+});
 
 const darkToggle = document.getElementById('dark-toggle');
 if (localStorage.getItem('2048-dark') === 'true') {
@@ -292,5 +324,10 @@ darkToggle.addEventListener('click', () => {
   localStorage.setItem('2048-dark', isDark);
 });
 
-// Start
-newGame();
+// Start — resume saved game or begin fresh
+document.getElementById('undo').disabled = true;
+if (loadState()) {
+  render();
+} else {
+  newGame();
+}
